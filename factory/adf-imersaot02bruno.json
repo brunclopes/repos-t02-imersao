@@ -1,0 +1,9 @@
+{
+	"name": "adf-imersaot02bruno",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "3573128c-8a7a-4e42-8263-cdb89154b04b",
+		"tenantId": "66b8cf18-3518-4ef4-a85d-0e55f65a3bb3"
+	}
+}
