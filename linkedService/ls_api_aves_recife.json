@@ -1,0 +1,12 @@
+{
+	"name": "ls_api_aves_recife",
+	"properties": {
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "http://dados.recife.pe.gov.br/dataset/1ddcc3d1-a596-4416-bee8-7d38d45c12fa/resource/536a9a9f-7860-40db-9931-0b9374d174bf/download/arvoresfaunas_parquesepracas.geojson",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
