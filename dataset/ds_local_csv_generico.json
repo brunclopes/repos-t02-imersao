@@ -9,7 +9,7 @@
 			"file_name": {
 				"type": "string"
 			},
-			"separator_name": {
+			"separator_file": {
 				"type": "string"
 			}
 		},
@@ -24,7 +24,7 @@
 				}
 			},
 			"columnDelimiter": {
-				"value": "@dataset().separator_name",
+				"value": "@dataset().separator_file",
 				"type": "Expression"
 			},
 			"escapeChar": "\\",
