@@ -35,6 +35,7 @@
 				"type": "Expression"
 			},
 			"escapeChar": "\\",
+			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
 		"schema": []
