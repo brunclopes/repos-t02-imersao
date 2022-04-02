@@ -1,0 +1,17 @@
+{
+	"name": "ds_json_aves_api",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_api_aves_recife",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation"
+			}
+		},
+		"schema": {}
+	}
+}
