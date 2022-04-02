@@ -1,0 +1,16 @@
+{
+	"name": "ds_sqlserver_copia_local_generico",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azuresql_imersao",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "IMERSAO",
+			"table": "ARTISTA"
+		}
+	}
+}
