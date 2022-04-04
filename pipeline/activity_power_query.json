@@ -1,0 +1,61 @@
+{
+	"name": "activity_power_query",
+	"properties": {
+		"activities": [
+			{
+				"name": "EXEC Power Query Cli",
+				"type": "ExecuteWranglingDataflow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "powerquery_demo",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"UserQuerydscsvgenerico": {
+								"container_name": "raw",
+								"file_name": "clientes_pq.csv",
+								"separator_file": ";"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"queries": [
+						{
+							"queryName": "UserQuery",
+							"dataflowSinks": [
+								{
+									"name": "UserQuerydscsvgenerico",
+									"dataset": {
+										"referenceName": "ds_csv_generico",
+										"type": "DatasetReference",
+										"parameters": {
+											"container_name": "raw",
+											"file_name": "clientes_pq.csv",
+											"separator_file": ";"
+										}
+									},
+									"script": "sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> UserQuerydscsvgenerico"
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"folder": {
+			"name": "03_power_query"
+		},
+		"annotations": []
+	}
+}
