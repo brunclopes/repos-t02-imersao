@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "IMERSAO",
-			"table": "EVENTO_ARTISTA"
+			"table": "LOCALIZACAO"
 		}
 	}
 }
