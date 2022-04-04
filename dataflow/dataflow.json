@@ -1,0 +1,163 @@
+{
+	"name": "dataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_generic_azuresql",
+						"type": "DatasetReference"
+					},
+					"name": "TBCLI"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_generic_azuresql",
+						"type": "DatasetReference"
+					},
+					"name": "TBSALESHEADER"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_generic_azuresql",
+						"type": "DatasetReference"
+					},
+					"name": "VendasBoas"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_generic_azuresql",
+						"type": "DatasetReference"
+					},
+					"name": "VendasRuins"
+				}
+			],
+			"transformations": [
+				{
+					"name": "colcli"
+				},
+				{
+					"name": "colvendas"
+				},
+				{
+					"name": "JoinVendasCli"
+				},
+				{
+					"name": "CriandoNomeCompleto"
+				},
+				{
+					"name": "TotalVendasCli"
+				},
+				{
+					"name": "seVendas"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          CustomerID as integer,",
+				"          NameStyle as boolean,",
+				"          Title as string,",
+				"          FirstName as string,",
+				"          MiddleName as string,",
+				"          LastName as string,",
+				"          Suffix as string,",
+				"          CompanyName as string,",
+				"          SalesPerson as string,",
+				"          EmailAddress as string,",
+				"          Phone as string,",
+				"          PasswordHash as string,",
+				"          PasswordSalt as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> TBCLI",
+				"source(output(",
+				"          SalesOrderID as integer,",
+				"          RevisionNumber as integer,",
+				"          OrderDate as timestamp,",
+				"          DueDate as timestamp,",
+				"          ShipDate as timestamp,",
+				"          Status as integer,",
+				"          OnlineOrderFlag as boolean,",
+				"          SalesOrderNumber as string,",
+				"          PurchaseOrderNumber as string,",
+				"          AccountNumber as string,",
+				"          CustomerID as integer,",
+				"          ShipToAddressID as integer,",
+				"          BillToAddressID as integer,",
+				"          ShipMethod as string,",
+				"          CreditCardApprovalCode as string,",
+				"          SubTotal as decimal(19,4),",
+				"          TaxAmt as decimal(19,4),",
+				"          Freight as decimal(19,4),",
+				"          TotalDue as decimal(19,4),",
+				"          Comment as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> TBSALESHEADER",
+				"TBCLI select(mapColumn(",
+				"          CustomerID,",
+				"          NameStyle,",
+				"          Title,",
+				"          FirstName,",
+				"          MiddleName,",
+				"          LastName,",
+				"          CompanyName",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> colcli",
+				"TBSALESHEADER select(mapColumn(",
+				"          {Vendas.SalesOrderID} = SalesOrderID,",
+				"          {Vendas.OrderDate} = OrderDate,",
+				"          {Vendas.ShipDate} = ShipDate,",
+				"          {Vendas.SalesOrderNumber} = SalesOrderNumber,",
+				"          {Vendas.CustomerID} = CustomerID,",
+				"          {Vendas.TotalDue} = TotalDue",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> colvendas",
+				"colcli, colvendas join(CustomerID == {Vendas.CustomerID},",
+				"     joinType:'left',",
+				"     broadcast: 'auto')~> JoinVendasCli",
+				"JoinVendasCli derive(NomeCompleto = concat(FirstName, ' ', LastName)) ~> CriandoNomeCompleto",
+				"CriandoNomeCompleto aggregate(groupBy(NomeCompleto,",
+				"          CompanyName),",
+				"     QTDVendas = sum({Vendas.TotalDue})) ~> TotalVendasCli",
+				"TotalVendasCli split(QTDVendas >= 20000,",
+				"     disjoint: false) ~> seVendas@(out01, out02)",
+				"seVendas@out01 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     recreate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> VendasBoas",
+				"seVendas@out02 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     recreate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> VendasRuins"
+			]
+		}
+	}
+}
