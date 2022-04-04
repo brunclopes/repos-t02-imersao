@@ -1,0 +1,20 @@
+{
+	"name": "powerquery_demo",
+	"properties": {
+		"type": "WranglingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "ds_azuresql_pwq",
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~>  ds_azuresql_pwq",
+					"dataset": {
+						"referenceName": "ds_azuresql_pwq",
+						"type": "DatasetReference"
+					}
+				}
+			],
+			"script": "section Section1;\r\nshared ds_azuresql_pwq = let AdfDoc = Sql.Database(\"sql-imersao02brunoserver.database.windows.net\", \"sqldb-imersaot02bruno\", [CreateNavigationProperties = false]), InputTable = AdfDoc{[Schema=\"SalesLT\",Item=\"Customer\"]}[Data] in InputTable;\r\nshared UserQuery = let Source = #\"ds_azuresql_pwq\",\r\n  #\"Added custom\" = Table.TransformColumnTypes(Table.AddColumn(Source, \"NomeCompleto\", each [FirstName] & \" \" & [LastName]), {{\"NomeCompleto\", type text}}) in #\"Added custom\";\r\n",
+			"documentLocale": "en-us"
+		}
+	}
+}
