@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "IMERSAO",
-			"table": "ARTISTA"
+			"table": "ESTILO_MUSICAL"
 		}
 	}
 }
