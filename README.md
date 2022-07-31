@@ -1,4 +1,4 @@
-## Repositório do curso Imersão Big Data.
+## Repositório do curso Imersão em Azure Big Data
 
 Repositório da imersão em Azure Big Data, contendo os códigos do ADF (Azure Data Factory), e também os códigos do Databricks. No treinamento foi abordado uma solução de Big Data na Azure, utlizando o Azure Data Factory para ingestão de dados e orquestração de pipelines, o Azure Databricks para ingestão e processamento de dados, o Azure Analysis Services para criação de cubos OLAP, e o Power BI para visualização.
 Com o Azure Data Factory, foi trabalhado com as seguintes fontes: SQL Server On Premises e arquivos csv, txt e xlsx via máquina local. Todos os dados foram carregados no Storage da Azure. Pelo Data Lake foram carregados os dados nas camadas raw, trusted e refined, e também em um banco de dados Azure SQL.
